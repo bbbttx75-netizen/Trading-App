@@ -2,89 +2,186 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>SmartSignal Pro V2.0</title>
+  <title>SmartSignal Pro - التحليل الاحترافي</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg-dark: #1e1e1e;
+      --primary-color: #00bcd4; /* أزرق سماوي/تركوازي */
+      --secondary-color: #333333;
+      --text-light: #f4f4f4;
+      --buy-color: #4caf50;    /* أخضر */
+      --sell-color: #f44336;   /* أحمر */
+      --hold-color: #ffc107;   /* أصفر */
+    }
     body {
-      background-color: #111;
-      color: #fff;
-      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      font-family: 'Cairo', sans-serif;
       text-align: center;
-      padding: 20px;
+      padding: 0;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .header {
+      background-color: var(--secondary-color);
+      padding: 15px 0;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     }
     h1 {
-      color: #00ffcc;
-    }
-    .market-list, .recommendation {
-      background-color: #222;
-      border-radius: 10px;
-      padding: 15px;
-      margin: 20px auto;
-      width: 90%;
-      max-width: 500px;
-    }
-    button {
-      background-color: #00ffcc;
-      color: #000;
-      border: none;
-      padding: 10px 20px;
-      font-size: 16px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    button:hover {
-      background-color: #00ccaa;
-    }
-    .signal-text {
-        font-size: 24px;
-        font-weight: bold;
-        padding: 10px 0;
-    }
-    .countdown {
-        color: #ffcc00; /* لون أصفر للانتظار */
-        font-weight: bold;
-        margin-top: 10px;
+      color: var(--primary-color);
+      margin: 0;
+      font-size: 30px;
     }
     nav a {
-        color: #fff;
-        text-decoration: none;
-        margin: 0 10px;
-        transition: color 0.3s;
+      color: var(--text-light);
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: 400;
+      transition: color 0.3s;
     }
-    nav a:hover {
-        color: #00ffcc;
+    nav a:hover, .active-nav {
+      color: var(--primary-color) !important;
+      font-weight: 700;
     }
-    .active-nav {
-        color: #00ffcc !important;
-        font-weight: bold;
+    .container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    .card {
+      background-color: var(--secondary-color);
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 25px;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+    }
+    .market-list ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .market-list li {
+      background-color: #444;
+      color: var(--primary-color);
+      padding: 8px 15px;
+      margin: 5px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+    .market-list li:hover {
+      background-color: #555;
+    }
+    button {
+      background-color: var(--primary-color);
+      color: #000;
+      border: none;
+      padding: 12px 25px;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s, transform 0.2s;
+      margin-top: 15px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+    button:hover {
+      background-color: #0097a7;
+      transform: translateY(-2px);
+    }
+    .signal-box {
+      min-height: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+      border-radius: 10px;
+      transition: background-color 0.5s;
+    }
+    .signal-text {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+    }
+    .signal-detail {
+        font-size: 16px;
+        color: #bbb;
+    }
+    .countdown {
+      color: var(--hold-color);
+      font-weight: bold;
+      margin-top: 15px;
+      font-size: 20px;
+    }
+    /* ألوان وحركات خاصة بالتوصية */
+    .buy { background-color: var(--buy-color); color: #fff; }
+    .sell { background-color: var(--sell-color); color: #fff; }
+    .hold { background-color: var(--hold-color); color: #000; }
+
+    /* تنسيق خاص لتضمين الرابط */
+    .footer-link {
+        font-size: 12px;
+        color: #777;
+        margin-top: 30px;
+        word-break: break-all; /* يسمح بكسر النص الطويل */
     }
   </style>
 </head>
 <body>
-  <h1>📊 SmartSignal Pro</h1>
-  <p>منصة تداول ذكية مجانية 100% تعمل من جهازك اللوحي</p>
-
-  <nav style="padding: 10px; margin-bottom: 20px;">
+  <div class="header">
+    <h1>SmartSignal <span style="color:var(--text-light)">Pro</span></h1>
+    <p style="font-size: 14px; margin: 5px 0 10px; color: #aaa;">منصة تحليل فني مجانية</p>
+    <nav>
       <a href="index.html" class="active-nav">الرئيسية</a>
       <a href="about.html">من نحن</a>
-  </nav>
-
-  <div class="market-list">
-    <h2>🛒 قائمة أسواق ExpertOption</h2>
-    <ul>
-      <li>EUR/USD</li>
-      <li>BTC/USD</li>
-      <li>Gold</li>
-      <li>Apple</li>
-      <li>Amazon</li>
-    </ul>
+    </nav>
   </div>
 
-  <div class="recommendation">
-    <h2>🔍 التوصية الفنية</h2>
-    <p id="signal" class="signal-text">جارٍ التحليل...</p>
-    <div id="countdown-timer" class="countdown" style="display: none;"></div>
-    <button onclick="generateSignal()">تحديث التوصية</button>
+  <div class="container">
+    <div class="card market-list">
+      <h2>📈 الأسواق المتاحة</h2>
+      <ul>
+        <li>EUR/USD</li>
+        <li>BTC/USD</li>
+        <li>Gold (XAU/USD)</li>
+        <li>Apple (AAPL)</li>
+        <li>Amazon (AMZN)</li>
+      </ul>
+    </div>
+
+    <div class="card recommendation">
+      <h2>🚀 خلاصة التوصية</h2>
+      <div id="signal-box" class="signal-box" style="background-color: #555;">
+          <p id="signal-icon" style="font-size: 30px; margin: 0; color:var(--text-light); transition: color 0.5s;">⏳</p>
+          <p id="signal-text" class="signal-text" style="color:var(--text-light);">جارٍ تحليل البيانات...</p>
+          <p id="signal-detail" class="signal-detail">اضغط على تحديث للحصول على الإشارة.</p>
+      </div>
+      
+      <div id="countdown-timer" class="countdown" style="display: none;"></div>
+      <button onclick="generateSignal()">تحديث الإشارة الآن</button>
+    </div>
+
+    <p class="footer-link">
+        🔗 رابط موقعك المنشور حالياً:
+        <a href="https://bbbbttx75-netizen.github.io/my-ai-project/" target="_blank">
+          https://bbbbttx75-netizen.github.io/my-ai-project/
+        </a>
+        <br>
+        (لتغييره إلى رابط مميز، يجب شراء نطاق مخصص أولاً)
+    </p>
   </div>
 
   <script>
@@ -97,23 +194,37 @@
       }
       document.getElementById("countdown-timer").style.display = 'none';
 
-      // قائمة التوصيات الجديدة
+      // قائمة التوصيات
       const signals = [
-        { text: "📉 بيع", detail: "مؤشر RSI فوق 70" },
-        { text: "📈 شراء", detail: "مؤشر MACD يعطي تقاطع إيجابي" },
-        { text: "⏳ انتظار", detail: "السوق متقلب، قيد المراجعة" },
-        { text: "📈 شراء", detail: "ترند صاعد واضح" },
-        { text: "📉 بيع", detail: "حجم التداول منخفض" }
+        { action: "SELL", text: "بيع قوي", detail: "RSI وصل لمنطقة التشبع الشرائي.", icon: "⬇️", color: "var(--sell-color)" },
+        { action: "BUY", text: "شراء محتمل", detail: "تقاطع إيجابي في MACD وحجم تداول مرتفع.", icon: "⬆️", color: "var(--buy-color)" },
+        { action: "HOLD", text: "انتظار/حياد", detail: "السوق متقلب، قيد مراجعة البيانات الجديدة.", icon: "⏳", color: "var(--hold-color)" },
+        { action: "BUY", text: "شراء متوسط", detail: "كسر المقاومة على المدى القصير.", icon: "🔼", color: "var(--buy-color)" },
+        { action: "SELL", text: "بيع خفيف", detail: "تراجع بسيط بعد موجة صعود.", icon: "🔽", color: "var(--sell-color)" }
       ];
       
       const random = Math.floor(Math.random() * signals.length);
       const chosenSignal = signals[random];
       
-      document.getElementById("signal").innerText = `${chosenSignal.text} - ${chosenSignal.detail}`;
+      // تحديث العناصر
+      const signalBox = document.getElementById("signal-box");
+      document.getElementById("signal-icon").innerText = chosenSignal.icon;
+      document.getElementById("signal-text").innerText = chosenSignal.text;
+      document.getElementById("signal-detail").innerText = chosenSignal.detail;
+
+      // تغيير خلفية الصندوق
+      signalBox.style.backgroundColor = chosenSignal.color;
+      
+      // ضبط لون النص ليتناسب مع الخلفية (أصفر فاتح يحتاج نص داكن)
+      const textColor = chosenSignal.action === 'HOLD' ? '#000' : '#fff'; 
+      document.getElementById("signal-icon").style.color = textColor;
+      document.getElementById("signal-text").style.color = textColor;
+      document.getElementById("signal-detail").style.color = chosenSignal.action === 'HOLD' ? '#444' : '#eee';
+
 
       // إذا كانت التوصية "انتظار"، ابدأ العد التنازلي
-      if (chosenSignal.text === "⏳ انتظار") {
-        startCountdown(15); // يبدأ العد من 15 ثانية
+      if (chosenSignal.action === "HOLD") {
+        startCountdown(15); 
       }
     }
 
@@ -121,6 +232,7 @@
       let timer = duration;
       const display = document.getElementById("countdown-timer");
       display.style.display = 'block';
+      display.style.color = 'var(--text-light)'; // لون فاتح للعداد
       
       countdownInterval = setInterval(() => {
         const remainingSeconds = timer % 60;
@@ -128,14 +240,13 @@
 
         if (--timer < 0) {
           clearInterval(countdownInterval);
-          display.textContent = "انتهى الانتظار! حدث التوصية.";
-          // يمكن هنا تشغيل generateSignal() تلقائيًا إذا أردت
+          display.textContent = "انتهى الانتظار. اضغط تحديث.";
         }
       }, 1000);
     }
     
     // تشغيل التوصية عند تحميل الصفحة لأول مرة
-    generateSignal(); 
+    setTimeout(generateSignal, 500); 
   </script>
 </body>
 </html>
