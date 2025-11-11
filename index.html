@@ -1,22 +1,141 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>SmartSignal Pro V2.0</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      color: #00ffcc;
+    }
+    .market-list, .recommendation {
+      background-color: #222;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 20px auto;
+      width: 90%;
+      max-width: 500px;
+    }
+    button {
+      background-color: #00ffcc;
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #00ccaa;
+    }
+    .signal-text {
+        font-size: 24px;
+        font-weight: bold;
+        padding: 10px 0;
+    }
+    .countdown {
+        color: #ffcc00; /* لون أصفر للانتظار */
+        font-weight: bold;
+        margin-top: 10px;
+    }
+    nav a {
+        color: #fff;
+        text-decoration: none;
+        margin: 0 10px;
+        transition: color 0.3s;
+    }
+    nav a:hover {
+        color: #00ffcc;
+    }
+    .active-nav {
+        color: #00ffcc !important;
+        font-weight: bold;
+    }
+  </style>
+</head>
 <body>
   <h1>📊 SmartSignal Pro</h1>
   <p>منصة تداول ذكية مجانية 100% تعمل من جهازك اللوحي</p>
-  
+
   <nav style="padding: 10px; margin-bottom: 20px;">
-      <a href="index.html" style="color: #00ffcc; text-decoration: none; margin-right: 20px; font-weight: bold;">الرئيسية</a>
-      <a href="about.html" style="color: #fff; text-decoration: none;">من نحن</a>
+      <a href="index.html" class="active-nav">الرئيسية</a>
+      <a href="about.html">من نحن</a>
   </nav>
+
   <div class="market-list">
-    ```
+    <h2>🛒 قائمة أسواق ExpertOption</h2>
+    <ul>
+      <li>EUR/USD</li>
+      <li>BTC/USD</li>
+      <li>Gold</li>
+      <li>Apple</li>
+      <li>Amazon</li>
+    </ul>
+  </div>
 
----
+  <div class="recommendation">
+    <h2>🔍 التوصية الفنية</h2>
+    <p id="signal" class="signal-text">جارٍ التحليل...</p>
+    <div id="countdown-timer" class="countdown" style="display: none;"></div>
+    <button onclick="generateSignal()">تحديث التوصية</button>
+  </div>
 
-## 2. 📦 خطوات GitHub لإنشاء المستودع والنشر
+  <script>
+    let countdownInterval;
 
-| الخطوة | الإجراء المطلوب في GitHub | الغرض |
-| :--- | :--- | :--- |
-| **إنشاء المستودع (Repo)** | 1. اضغط على **`+`** ثم **`New Repository`**. 2. اختر اسمًا مناسبًا (مثلاً: `SmartSignalPro-Site`). 3. اختر **`Public`** (عام). 4. اضغط **`Create repository`**. | تجهيز مكان حفظ الملفات. |
-| **رفع الملفات (Upload)** | 1. في المستودع الجديد، اضغط على **`Add file`** ثم **`Upload files`**. 2. اسحب ملفي **`index.html`** و **`about.html`** إلى المتصفح. 3. اضغط على الزر الأخضر **`Commit changes`**. | وضع ملفات موقعك على الإنترنت. |
-| **تفعيل GitHub Pages** | 1. اذهب إلى تبويب **`Settings`**. 2. في القائمة الجانبية، اختر **`Pages`**. 3. في قسم "Source"، اختر **`Branch: main`** والمجلد **`/root`**. 4. اضغط على **`Save`**. | تفعيل خاصية النشر المجانية لتحويل الكود إلى رابط موقع. |
+    function generateSignal() {
+      // إيقاف أي عداد سابق
+      if (countdownInterval) {
+        clearInterval(countdownInterval);
+      }
+      document.getElementById("countdown-timer").style.display = 'none';
 
-بعد الخطوة الأخيرة، انتظر بضع دقائق، وسيظهر رابط موقعك أسفل قسم `Pages`. مبروك، سيكون موقعك منشورًا على الإنترنت!
+      // قائمة التوصيات الجديدة
+      const signals = [
+        { text: "📉 بيع", detail: "مؤشر RSI فوق 70" },
+        { text: "📈 شراء", detail: "مؤشر MACD يعطي تقاطع إيجابي" },
+        { text: "⏳ انتظار", detail: "السوق متقلب، قيد المراجعة" },
+        { text: "📈 شراء", detail: "ترند صاعد واضح" },
+        { text: "📉 بيع", detail: "حجم التداول منخفض" }
+      ];
+      
+      const random = Math.floor(Math.random() * signals.length);
+      const chosenSignal = signals[random];
+      
+      document.getElementById("signal").innerText = `${chosenSignal.text} - ${chosenSignal.detail}`;
+
+      // إذا كانت التوصية "انتظار"، ابدأ العد التنازلي
+      if (chosenSignal.text === "⏳ انتظار") {
+        startCountdown(15); // يبدأ العد من 15 ثانية
+      }
+    }
+
+    function startCountdown(duration) {
+      let timer = duration;
+      const display = document.getElementById("countdown-timer");
+      display.style.display = 'block';
+      
+      countdownInterval = setInterval(() => {
+        const remainingSeconds = timer % 60;
+        display.textContent = `التوصية الجديدة بعد ${remainingSeconds} ثانية`;
+
+        if (--timer < 0) {
+          clearInterval(countdownInterval);
+          display.textContent = "انتهى الانتظار! حدث التوصية.";
+          // يمكن هنا تشغيل generateSignal() تلقائيًا إذا أردت
+        }
+      }, 1000);
+    }
+    
+    // تشغيل التوصية عند تحميل الصفحة لأول مرة
+    generateSignal(); 
+  </script>
+</body>
+</html>
